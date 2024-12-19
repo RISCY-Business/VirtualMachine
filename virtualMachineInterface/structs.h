@@ -4,7 +4,8 @@
 
 typedef struct Computor
 {
-  i8* ram;
-  i8* program;
+  i8*  ram;
+  i8*  program;
+  bool clock;
 } Computor;
 

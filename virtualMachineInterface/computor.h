@@ -27,3 +27,9 @@ FORGE_API bool loadProgram (const char* FILE_PATH);
 FORGE_API void printInstructionMemory ();
 
 FORGE_API void printRAM();
+
+/*
+NOTE: This is the main computor simulation loop. Its a while true for now (maybe a stop instruction later). It will update 
+all its components
+*/
+FORGE_API void update();

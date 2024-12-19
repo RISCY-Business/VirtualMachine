@@ -1,4 +1,5 @@
 #include "../virtualMachineInterface/computor.h"
+#include "../virtualMachineInterface/clock.h"
 #include "../library/include/logger.h"
 #include "../library/include/asserts.h"
 #include "../library/include/filesystem.h"
@@ -34,6 +35,10 @@ bool startComputor()
 
   FORGE_LOG_TRACE("Rewriting %s's Instruction Memory of size %lld", COMPUTOR_NAME, PROCESSOR_INSTRUCTION_MEMORY_SIZE_BYTES);
   memset(computor.program, 0, PROCESSOR_INSTRUCTION_MEMORY_SIZE_BYTES);
+
+
+  FORGE_LOG_TRACE("Running %s's clock at %lld hz", COMPUTOR_NAME, CLOCK_FREQUENCY_HERTZ);
+  computor.clock = false;
 
   FORGE_LOG_INFO("%s successfully booted", COMPUTOR_NAME);
   return true;
@@ -156,4 +161,10 @@ void printRAM()
 
     FORGE_LOG_DEBUG("(%08d) : %02X %02X %02X %02X", i, b0, b1, b2, b3);
   }
+}
+
+void update()
+{
+  // - - - update clock first
+  updateClock();
 }

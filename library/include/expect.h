@@ -29,6 +29,20 @@
     return false;                                                                                                                       \
   }
 
+#define expectToBeNULL(ACTUAL)                                                                                                          \
+  if (ACTUAL != NULL)                                                                                                                   \
+  {                                                                                                                                     \
+    FORGE_LOG_ERROR("--> EXPECTED NULL, but got: not NULL. File: %s:%d.", __FILE__, __LINE__);                                          \
+    return false;                                                                                                                       \
+  }
+
+#define expectToBeNotNULL(ACTUAL)                                                                                                       \
+  if (ACTUAL == NULL)                                                                                                                   \
+  {                                                                                                                                     \
+    FORGE_LOG_ERROR("--> EXPECTED not NULL, but got: NULL. File: %s:%d.", __FILE__, __LINE__);                                          \
+    return false;                                                                                                                       \
+  }
+
 #define expectToBeFalse(ACTUAL)                                                                                                         \
   if (ACTUAL != false)                                                                                                                  \
   {                                                                                                                                     \

@@ -2,10 +2,19 @@
 #include "../defines.h"
 #include "proccessorDefaults.h"
 
+typedef struct Register
+{
+  u32     value;
+  u32     busValue;
+} Register;
+
+
 typedef struct Computor
 {
-  i8*  ram;
-  i8*  program;
-  bool clock;
+  u8*       ram;
+  u8*       program;
+  Register  registers[32];
+  bool      clock;
 } Computor;
+
 

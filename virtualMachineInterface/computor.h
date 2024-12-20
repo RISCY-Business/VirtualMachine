@@ -28,6 +28,7 @@ FORGE_API void printInstructionMemory ();
 
 FORGE_API void printRAM();
 
+FORGE_API void printRegisters();
 /*
 NOTE: This is the main computor simulation loop. Its a while true for now (maybe a stop instruction later). It will update 
 all its components

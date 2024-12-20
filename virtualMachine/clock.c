@@ -1,6 +1,4 @@
-#include "../virtualMachineInterface/clock.h"
-#include "../virtualMachineInterface/computor.h"
-#include "../virtualMachineInterface/proccessorDefaults.h"
+#include "../virtualMachineInterface/include.h"
 #include "../library/include/logger.h"
 #include <bits/time.h>
 #include <time.h>

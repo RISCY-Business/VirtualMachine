@@ -39,7 +39,7 @@ bool startComputor()
     return false;
   };
 
-  FORGE_LOG_TRACE("Running %s's clock at %lld hz", COMPUTOR_NAME, CLOCK_FREQUENCY_HERTZ);
+  FORGE_LOG_TRACE("Running %s's clock at %f hz", COMPUTOR_NAME, CLOCK_FREQUENCY_HERTZ);
   computor.clock = false;
 
   FORGE_LOG_INFO("%s successfully booted", COMPUTOR_NAME);
@@ -182,15 +182,24 @@ void printRegisters()
 // - - - update
 void update()
 {
+
   // - - - update clock first
   updateClock();
+
+  // - - - print the current instruction
+  const char* edge = "No Edge";
+  if (isRisingEdge()) edge = "Rising";
+  if (isFallingEdge()) edge = "Falling";
+  FORGE_LOG_DEBUG("Clock : %s / %s", computor.clock ? "High" : "Low", edge);
+  if (!isRisingEdge()) return;
 
   // - - - update the registers 
   updateRegisters();
 
   // - - - update the ram 
   updateRam();
-
+  
+  FORGE_LOG_TRACE("Instruction : %u", getInstruction());
   // - - - update the program counter 
   updateProgramCounter();
 }

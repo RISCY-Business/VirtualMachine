@@ -49,7 +49,7 @@ FORGE_API const char* getRegisterName         (RegisterABI REGISTER);
 @brief:     This returns whatever value is stored in the register at the moment
 @error:     It returns -1 if the register doesnt exist, and an unisgned int with -1, :(
 */
-FORGE_API const u32   readRegister            (RegisterABI REGISTER);
+FORGE_API u32         readRegister            (RegisterABI REGISTER);
 
 /*
 @brief:     This writes the value to the register's bus. At the next clock pulse, the register will sync up with that value 

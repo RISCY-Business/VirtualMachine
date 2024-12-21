@@ -3,7 +3,7 @@
 
 // - - - NOTE: everything here is configurable
 #define PROCESSOR_RAM_SIZE_BYTES                    (128 * 1024)
-#define CLOCK_FREQUENCY_HERTZ                       (4 * 4 * 4)
+#define CLOCK_FREQUENCY_HERTZ                       (0.25f)
 #define COMPUTOR_NAME                               "Komputor"
 
 // - - - WARNING: do not change for the love of God

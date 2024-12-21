@@ -18,15 +18,15 @@ u64 getCurrentTimeMicros()
 
 void updateClock()
 {
-  // - - - do time keeping
-  u64 halfPeriod    = 100000 / (CLOCK_FREQUENCY_HERTZ * 2);
+  // - - - do time keepinG
+  f64 period        = 100000.0 / (CLOCK_FREQUENCY_HERTZ);
   u64 currentTime   = getCurrentTimeMicros();
   u64 elapsedTime   = currentTime - lastPulseTime;
 
   // - - - spin wait for the remaining time 
-  if (elapsedTime < halfPeriod)
+  if (elapsedTime < period)
   {
-    usleep(halfPeriod - elapsedTime);
+    usleep(period - elapsedTime);
   }
   else 
   {

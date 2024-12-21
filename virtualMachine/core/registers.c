@@ -52,7 +52,7 @@ const char* getRegisterName(RegisterABI REGISTER)
 }
 
 
-const u32 readRegister(RegisterABI REGISTER)
+u32 readRegister(RegisterABI REGISTER)
 {
   if (REGISTER == registerCount)
   {

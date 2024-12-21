@@ -1,0 +1,15 @@
+# Exclude all binary files
+*.o
+*.so
+*.dll
+*.exe
+*.bin
+*.out
+*.a
+*.lib
+
+# Optionally exclude other common binary-related file types
+*.class
+*.jar
+*.pyc
+*.pyo

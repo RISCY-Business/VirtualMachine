@@ -2,6 +2,8 @@
 
 #pragma once
 #include "computor.h"
-#include "clock.h"
-#include "registers.h"
-#include "ram.h"
+#include "core/clock.h" 
+#include "core/registers.h" 
+#include "core/ram.h"
+
+#include "instructionFetch/programCounter.h"

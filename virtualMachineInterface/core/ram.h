@@ -1,5 +1,5 @@
 #pragma once 
-#include "structs.h"
+#include "../structs.h"
 
 /*
 @brief:     Converts address to the ram register index.

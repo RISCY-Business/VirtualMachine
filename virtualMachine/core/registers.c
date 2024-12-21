@@ -1,6 +1,6 @@
-#include "../virtualMachineInterface/include.h"
-#include "../library/include/logger.h"
-#include "../library/include/asserts.h"
+#include "../../virtualMachineInterface/include.h"
+#include "../../library/include/logger.h"
+#include "../../library/include/asserts.h"
 
 // - - - static register names
 const char* registerNames[registerCount] =

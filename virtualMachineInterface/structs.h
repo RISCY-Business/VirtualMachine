@@ -19,6 +19,7 @@ typedef struct Computor
 {
   RamModule ram;
   RamModule memRam;
+  Register  programCounter;
   Register  registers[32];
   bool      clock;
 } Computor;

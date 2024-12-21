@@ -1,5 +1,5 @@
-#include "../virtualMachineInterface/include.h"
-#include "../library/include/logger.h"
+#include "../../virtualMachineInterface/include.h"
+#include "../../library/include/logger.h"
 
 u32 convertAddressToRegisterIndex(u32 ADDRESS)
 {
@@ -33,9 +33,9 @@ void resetRam()
   computor.ram.busRegisterIndex     = 0;
   for (int i = 0; i < RAM_MODULE_REGISTERS; ++i)
   {
-    Register reg                    = computor.ram.registers[i];
-    reg.value                       = 0;
-    reg.busValue                    = 0;
+    Register* reg                   = &computor.ram.registers[i];
+    reg->value                      = 0;
+    reg->busValue                   = 0;
   }
 }
 
@@ -46,9 +46,9 @@ void resetMemoryRam()
   computor.memRam.busRegisterIndex  = 0;
   for (int i = 0; i < RAM_MODULE_REGISTERS; ++i)
   {
-    Register reg                    = computor.memRam.registers[i];
-    reg.value                       = 0;
-    reg.busValue                    = 0;
+    Register* reg                   = &computor.memRam.registers[i];
+    reg->value                      = 0;
+    reg->busValue                   = 0;
   }
 }
 

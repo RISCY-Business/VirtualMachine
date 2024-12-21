@@ -5,6 +5,20 @@ int main()
 {
   registerTest(computorShouldStart, "Starts the computor by creating the ram");
   registerTest(computorShouldNotStart, "Try to start the computor a second time and fail");
+
+
+  // - - - program counter test - - - 
+  registerTest(computorShouldNotReadFile, "The file does not exist, the computor should fail to read it");
+  registerTest(computorShouldReadFile, "The file does exist its just 0 and 1, read should be successful");
+  registerTest(checkProgramCounter0AtStart, "Program Counter should be zero when the computor starts");
+  registerTest(checkInstructions, "Check if instruction reading is going properly");
+  registerTest(checkUpdateProgramCounter, "Check if updating the program counter works properly");
+  registerTest(checkSetProgramCounter, "Check if the program counter is ready for branching");
+  registerTest(checkSetProgramCounterFail, "Check if the program counter refuses to branch outside of instruction memory");
+
+
+  // - - - clock test - - - 
+
   registerTest(runComputorFor50UpdatesAndPrintEdges, "Check if clock is working properly, includes one visual test");
 
 
@@ -23,14 +37,11 @@ int main()
 
   registerTest(checkAddressToRegisterIndexConversion, "Check if we are successfully translating address to register index");
   registerTest(checkRegisterIndexToAddressConversion, "check if we can go the other way around, from register index to address");
-  registerTest(checkResetRam, "Check if ram can be reset easily");
-  registerTest(checkResetMemoryRam, "Check if memory ram can be reset just as easily");
   registerTest(checkWriteRam, "Check if writing to ram happens properly");
   registerTest(checkReadRam, "Check if we can read the values that were written");
-  registerTest(checkReadMemoryRam, "Check if we can read from the memory ram");
+  registerTest(checkResetRam, "Check if ram can be reset easily");
+  registerTest(checkResetMemoryRam, "Check if memory ram can be reset just as easily");
 
-  registerTest(computorShouldNotReadFile, "The file does not exist, the computor should fail to read it");
-  registerTest(computorShouldReadFile, "The file does exist its just 0 and 1, read should be successful");
   registerTest(computorShouldStop, "Stop the computor and free the ram");
   registerTest(computorShouldNotStop, "Try to stop the computor a second time and fail");
   registerTest(computorShouldRestart, "Restart and stop the computor");

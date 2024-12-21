@@ -33,5 +33,11 @@ u8 checkRegisterIndexToAddressConversion();
 u8 checkResetRam();
 u8 checkResetMemoryRam();
 u8 checkReadRam();
-u8 checkReadMemoryRam();
 u8 checkWriteRam();
+
+// - - - test program counter
+u8 checkProgramCounter0AtStart();
+u8 checkUpdateProgramCounter();
+u8 checkSetProgramCounter();
+u8 checkSetProgramCounterFail();
+u8 checkInstructions();

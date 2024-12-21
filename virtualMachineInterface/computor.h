@@ -1,7 +1,8 @@
+#pragma once
 #include "structs.h"
 
 // - - - NOTE: this is the heart and soul of the program. The computor that runs everything
-static Computor computor;
+extern Computor computor;
 
 /*
 @brief:     Start computor will try to start the clock, allocate ram, instruction memory, resets registers etc

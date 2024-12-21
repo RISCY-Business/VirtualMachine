@@ -1,5 +1,5 @@
 #pragma once 
-#include "structs.h"
+#include "../structs.h"
 
 //- - -  NOTE: This is just the indexes of the registers in the register file in the computor
 typedef enum RegisterABI

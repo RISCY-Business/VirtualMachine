@@ -1,11 +1,13 @@
 #include "../virtualMachineInterface/computor.h"
-#include "../virtualMachineInterface/clock.h"
+#include "../virtualMachineInterface/core/clock.h"
 #include "../library/include/logger.h"
-#include "../virtualMachineInterface/registers.h"
-#include "../virtualMachineInterface/ram.h"
+#include "../virtualMachineInterface/core/registers.h"
+#include "../virtualMachineInterface/core/ram.h"
+#include "../virtualMachineInterface/instructionFetch/programCounter.h"
 #include "../library/include/filesystem.h"
 
 static bool boot = false;
+Computor computor;
 
 // - - - start computor
 bool startComputor()
@@ -30,6 +32,12 @@ bool startComputor()
   {
     computor.registers[i].value = 0;
   }
+
+  FORGE_LOG_TRACE("Resetting the value of program counter to 0");
+  if (!setProgramCounter(0))
+  {
+    return false;
+  };
 
   FORGE_LOG_TRACE("Running %s's clock at %lld hz", COMPUTOR_NAME, CLOCK_FREQUENCY_HERTZ);
   computor.clock = false;
@@ -182,4 +190,7 @@ void update()
 
   // - - - update the ram 
   updateRam();
+
+  // - - - update the program counter 
+  updateProgramCounter();
 }

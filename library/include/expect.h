@@ -8,6 +8,13 @@
     return false;                                                                                                                       \
   }
 
+#define expectStringToBe(EXPECTED, ACTUAL)                                                                                              \
+  if (strcmp(EXPECTED, ACTUAL) != 0)                                                                                                    \
+  {                                                                                                                                     \
+    FORGE_LOG_ERROR("--> EXPECTED %s, but got: %s. File: %s:%d", EXPECTED, ACTUAL, __FILE__, __LINE__)                                  \
+    return false;                                                                                                                       \
+  }
+
 #define expectShouldNotBe(EXPECTED, ACTUAL)                                                                                             \
   if (ACTUAL == EXPECTED)                                                                                                               \
   {                                                                                                                                     \

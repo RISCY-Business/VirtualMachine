@@ -41,7 +41,7 @@ u8 checkResetMemoryRam()
   resetMemoryRam();
   for (u32 address = 0; address < PROCESSOR_RAM_SIZE_BYTES; address += 4) 
   {
-    expectShouldBe(readMemoryRam(address), 0);
+    expectShouldBe(0, readMemoryRam(address));
   }
 
   return true;
@@ -65,6 +65,7 @@ u8 checkWriteRam()
 
 u8 checkReadRam()
 {
+  FORGE_LOG_WARNING("This test causes an error");
   while (!isRisingEdge())
   {
     update();
@@ -75,9 +76,4 @@ u8 checkReadRam()
   expectShouldBe(readRam(PROCESSOR_RAM_SIZE_BYTES + 1), -1);
 
   return true;
-}
-
-u8 checkReadMemoryRam()
-{
-  return SKIP_TEST;
 }

@@ -36,7 +36,6 @@ u8 computorShouldRestart()
 u8 computorShouldReadFile()
 {
   expectToBeTrue(loadProgram("program.txt"));
-  printInstructionMemory();
   return true;
 }
 
@@ -44,7 +43,6 @@ u8 computorShouldNotReadFile()
 {
   FORGE_LOG_WARNING("This test will cause an error");
   expectToBeFalse(loadProgram("notProgram.txt"));
-  printInstructionMemory();
   return true;
 }
 

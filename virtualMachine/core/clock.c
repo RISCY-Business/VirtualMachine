@@ -1,5 +1,5 @@
-#include "../virtualMachineInterface/include.h"
-#include "../library/include/logger.h"
+#include "../../virtualMachineInterface/include.h"
+#include "../../library/include/logger.h"
 #include <bits/time.h>
 #include <time.h>
 #include <unistd.h>

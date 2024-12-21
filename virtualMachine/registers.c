@@ -1,6 +1,8 @@
 #include "../virtualMachineInterface/include.h"
 #include "../library/include/logger.h"
+#include "../library/include/asserts.h"
 
+// - - - static register names
 const char* registerNames[registerCount] =
 {
   "Zero",
@@ -49,6 +51,7 @@ const char* getRegisterName(RegisterABI REGISTER)
   return registerNames[REGISTER]; 
 }
 
+
 const u32 readRegister(RegisterABI REGISTER)
 {
   if (REGISTER == registerCount)
@@ -59,6 +62,7 @@ const u32 readRegister(RegisterABI REGISTER)
 
   return computor.registers[REGISTER].value;
 }
+
 
 bool writeRegister(RegisterABI REGISTER, const u32 VALUE)
 {
@@ -74,12 +78,11 @@ bool writeRegister(RegisterABI REGISTER, const u32 VALUE)
     return false;
   }
 
-  computor.registers[REGISTER].busValue = VALUE;
-
-  if (!isRisingEdge()) FORGE_LOG_WARNING("Writing to register ABI : %d NAME: %s without a rising edge. Write will occur on the next clock rise", REGISTER, getRegisterName(REGISTER));
-  computor.registers[REGISTER].busValue = VALUE;
+  computor.registers[REGISTER].busValue                   = VALUE;
+  if (isRisingEdge()) computor.registers[REGISTER].value  = VALUE;
   return true;
 }
+
 
 void printRegisterValue(RegisterABI REGISTER)
 {
@@ -91,11 +94,19 @@ void printRegisterValue(RegisterABI REGISTER)
   FORGE_LOG_DEBUG("%-20s x%-2d --> %02X", getRegisterName(REGISTER), REGISTER, readRegister(REGISTER));
 }
 
+
+void updateRegister(Register* REGISTER)
+{
+  FORGE_ASSERT_MESSAGE(REGISTER != NULL, "Cannot update a NULL register");
+  REGISTER->value = REGISTER->busValue;
+}
+
+
 void updateRegisters()
 {
   if (!isRisingEdge()) return;
   for (int i = 0; i < registerCount; ++i)
   {
-    computor.registers[i].value = computor.registers[i].busValue;
+    updateRegister(&computor.registers[i]);
   }
 }

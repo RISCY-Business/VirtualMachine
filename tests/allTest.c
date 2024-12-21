@@ -18,6 +18,17 @@ int main()
   registerTest(failAtWriteAtZero, "Fail to write at the hardcoded zero register");
   registerTest(successfullyPrintAllRegisterData, "Print all the registers");
 
+
+  // - - - ram test - - - 
+
+  registerTest(checkAddressToRegisterIndexConversion, "Check if we are successfully translating address to register index");
+  registerTest(checkRegisterIndexToAddressConversion, "check if we can go the other way around, from register index to address");
+  registerTest(checkResetRam, "Check if ram can be reset easily");
+  registerTest(checkResetMemoryRam, "Check if memory ram can be reset just as easily");
+  registerTest(checkWriteRam, "Check if writing to ram happens properly");
+  registerTest(checkReadRam, "Check if we can read the values that were written");
+  registerTest(checkReadMemoryRam, "Check if we can read from the memory ram");
+
   registerTest(computorShouldNotReadFile, "The file does not exist, the computor should fail to read it");
   registerTest(computorShouldReadFile, "The file does exist its just 0 and 1, read should be successful");
   registerTest(computorShouldStop, "Stop the computor and free the ram");

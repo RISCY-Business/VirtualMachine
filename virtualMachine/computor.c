@@ -2,7 +2,7 @@
 #include "../virtualMachineInterface/clock.h"
 #include "../library/include/logger.h"
 #include "../virtualMachineInterface/registers.h"
-#include "../library/include/asserts.h"
+#include "../virtualMachineInterface/ram.h"
 #include "../library/include/filesystem.h"
 
 static bool boot = false;
@@ -19,25 +19,11 @@ bool startComputor()
   }
   boot              = true;
 
-  FORGE_LOG_TRACE("Allocating RAM of size %lld to %s", PROCESSOR_RAM_SIZE_BYTES, COMPUTOR_NAME);
-  computor.ram     = malloc(PROCESSOR_RAM_SIZE_BYTES);
-  if (!computor.ram)
-  {
-    FORGE_LOG_FATAL("Memory allocation failed for %s's RAM. size %lld", COMPUTOR_NAME, PROCESSOR_RAM_SIZE_BYTES);
-    return false;
-  }
+  FORGE_LOG_TRACE("Resetting RAM of size %lld to %s", PROCESSOR_RAM_SIZE_BYTES, COMPUTOR_NAME);
+  resetRam();
   
-  FORGE_LOG_TRACE("Allocating Instruction Memory of size %lld to %s", PROCESSOR_INSTRUCTION_MEMORY_SIZE_BYTES, COMPUTOR_NAME);
-  computor.program = malloc(PROCESSOR_INSTRUCTION_MEMORY_SIZE_BYTES);
-  if (!computor.program)
-  {
-    FORGE_LOG_FATAL("Memory allocation failed for %s's Instruction Memory. size %lld", COMPUTOR_NAME, PROCESSOR_INSTRUCTION_MEMORY_SIZE_BYTES);
-    return false;
-  }
-
-  FORGE_LOG_TRACE("Rewriting %s's Instruction Memory of size %lld", COMPUTOR_NAME, PROCESSOR_INSTRUCTION_MEMORY_SIZE_BYTES);
-  memset(computor.program, 0, PROCESSOR_INSTRUCTION_MEMORY_SIZE_BYTES);
-
+  FORGE_LOG_TRACE("Resetting Instruction Memory of size %lld to %s", PROCESSOR_INSTRUCTION_MEMORY_SIZE_BYTES, COMPUTOR_NAME);
+  resetMemoryRam();
 
   FORGE_LOG_TRACE("Resetting all registers of %s, count : %d", COMPUTOR_NAME, registerCount);
   for (int i = 0; i < registerCount; ++i)
@@ -63,22 +49,6 @@ bool stopComputor()
     return false;
   }
   boot              = false;
-
-  FORGE_LOG_TRACE("Freeing %s's RAM", COMPUTOR_NAME);
-  if (!computor.ram)
-  {
-    FORGE_LOG_FATAL("%s has no RAM!", COMPUTOR_NAME);
-    return false;
-  }
-  free(computor.ram);
-  
-  FORGE_LOG_TRACE("Freeing %s's Instruction Memory", COMPUTOR_NAME);
-  if (!computor.program)
-  {
-    FORGE_LOG_FATAL("%s has no Instruction Memory!", COMPUTOR_NAME);
-    return false;
-  }
-  free(computor.program);
 
   FORGE_LOG_INFO("%s successfully shutdown", COMPUTOR_NAME);
   return true;
@@ -111,8 +81,6 @@ bool loadProgram (const char* FILE_PATH)
     FORGE_LOG_WARNING("The file %s is bigger(%.2f KB) than %s's instruction memory (%.2f KB)", FILE_PATH, getFileSize(&file) / 1024.0f, COMPUTOR_NAME, PROCESSOR_INSTRUCTION_MEMORY_SIZE_BYTES / 1024.0f);
   }
 
-  memset(computor.program, 0, PROCESSOR_INSTRUCTION_MEMORY_SIZE_BYTES);
-
   char*     lineRead;
   int       lineNumber = 0;
 
@@ -141,11 +109,8 @@ bool loadProgram (const char* FILE_PATH)
       }
     }
 
-    // - - - store the instruction in program memory 
-    computor.program[lineNumber * 4 + 0] = (instruction >> 24) & 0xFF;
-    computor.program[lineNumber * 4 + 1] = (instruction >> 16) & 0xFF;
-    computor.program[lineNumber * 4 + 2] = (instruction >> 8) & 0xFF;
-    computor.program[lineNumber * 4 + 3] = instruction & 0xFF;
+    // - - - store the instruction in program memory
+    computor.memRam.registers[lineNumber].value = instruction;
 
     lineNumber++;
     free (lineRead);
@@ -170,18 +135,12 @@ void printInstructionMemory()
     FORGE_LOG_FATAL("%s has not been booted yet. Aborting Instruction Memory Print");
     return;
   }
-  FORGE_ASSERT_MESSAGE(computor.program != NULL, "Cannot print instruction memory if it doesnt exist");
 
-  FORGE_LOG_INFO("\n- - - %s's Instruction Memory (%f MB)- - - \n", COMPUTOR_NAME, PROCESSOR_INSTRUCTION_MEMORY_SIZE_BYTES / 1024.0f / 1024.0f);
+  FORGE_LOG_INFO("\n- - - %s's Instruction Memory (%f KB)- - - \n", COMPUTOR_NAME, PROCESSOR_INSTRUCTION_MEMORY_SIZE_BYTES / 1024.0f);
 
-  for (int i = 0; i < PROCESSOR_INSTRUCTION_MEMORY_SIZE_BYTES; i += 4)
+  for (int i = 0; i < RAM_MODULE_REGISTERS; ++i)
   {
-    i8 b0 = computor.program[i];
-    i8 b1 = (i + 1 < PROCESSOR_INSTRUCTION_MEMORY_SIZE_BYTES) ? computor.program[i + 1] : 0;
-    i8 b2 = (i + 2 < PROCESSOR_INSTRUCTION_MEMORY_SIZE_BYTES) ? computor.program[i + 2] : 0;
-    i8 b3 = (i + 3 < PROCESSOR_INSTRUCTION_MEMORY_SIZE_BYTES) ? computor.program[i + 3] : 0;
-
-    FORGE_LOG_DEBUG("(%08d) : %d %d %d %d", i, b0, b1, b2, b3);
+    FORGE_LOG_DEBUG("(%08d) : %u", convertRegisterIndexToAddress(i), computor.memRam.registers[i].value);
   }
 }
 
@@ -193,18 +152,12 @@ void printRAM()
     FORGE_LOG_FATAL("%s has not been booted yet. Aborting RAM Print");
     return;
   }
-  FORGE_ASSERT_MESSAGE(computor.program != NULL, "Cannot print instruction memory if it doesnt exist");
 
-  FORGE_LOG_INFO("\n- - - %s's RAM (%f MB)- - - \n", COMPUTOR_NAME, PROCESSOR_RAM_SIZE_BYTES / 1024.0f / 1024.0f);
+  FORGE_LOG_INFO("\n- - - %s's RAM (%f KB)- - - \n", COMPUTOR_NAME, PROCESSOR_RAM_SIZE_BYTES / 1024.0f);
 
-  for (int i = 0; i < PROCESSOR_RAM_SIZE_BYTES; i += 4)
+  for (int i = 0; i < RAM_MODULE_REGISTERS; ++i)
   {
-    i8 b0 = computor.ram[i];
-    i8 b1 = (i + 1 < PROCESSOR_RAM_SIZE_BYTES) ? computor.ram[i + 1] : 0;
-    i8 b2 = (i + 2 < PROCESSOR_RAM_SIZE_BYTES) ? computor.ram[i + 2] : 0;
-    i8 b3 = (i + 3 < PROCESSOR_RAM_SIZE_BYTES) ? computor.ram[i + 3] : 0;
-
-    FORGE_LOG_DEBUG("(%08d) : %d %d %d %d", i, b0, b1, b2, b3);
+    FORGE_LOG_DEBUG("(%08d) : %u", convertRegisterIndexToAddress(i), computor.ram.registers[i].value);
   }
 }
 
@@ -226,4 +179,7 @@ void update()
 
   // - - - update the registers 
   updateRegisters();
+
+  // - - - update the ram 
+  updateRam();
 }
